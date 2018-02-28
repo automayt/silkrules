@@ -49,11 +49,8 @@ shift $((OPTIND-1))
 if [ -n "${h}" ]; then
     helpfunc
 fi
-if [ -z "${s}" ] && [ -z "${e}" ] && [ -z "${f}" ]; then
+if [ -z "${t}" ] && [ -z "${s}" ] && [ -z "${e}" ]; then
     usage
-fi
-if [ -z "${f}" ]; then
-    nohost
 fi
 if ([ -n "${s}" ] || [ -n "${e}" ]) && [ -n "${t}" ]; then
     usageerror
@@ -78,7 +75,8 @@ startdate=`date -u -d "${t} minutes ago" "+%Y/%m/%d"`
 starttimerange=`date -u -d "${t} minutes ago" "+%Y/%m/%dT%H:%M:%S.%3N"`
 starttime="--start-date=$startdate"
 activetime="--active-time=$starttimerange-$endtimerange"
-echo $activetime $starttime $endtime
+echo -e "\e[4mTime Range Analyzed\e[24m"
+echo -e "\e[33m$activetime $starttime $endtime"
 
 fi
 
@@ -175,6 +173,11 @@ if [[ -n "${@}" ]]; then
   done
 
   #parallel-ssh -p 5 -i -t 0 -o ConnectTimeout=10 -h ${f} "$rulecombine"| sed -e $"/SUCCESS/i\\\n"|  sed "/SUCCESS/i----------------------------------------------------------------" | sed ''/SUCCESS/s//`printf "\033[32mSUCCESS\033[0m"`/'' | sed ''/FAILURE/s//`printf "\033[31mFAILURE\033[0m"`/'' | sed -e "s/^.*rule results.*$/\x1b[34m&\x1b[0m/"
-#exit
-parallel-ssh -v -p 5 -i -t 0 -o ConnectTimeout=10 -h ${f} "$rulecombine"| sed -e $"/SUCCESS/i\\\n"|  sed "/SUCCESS/i----------------------------------------------------------------" | sed ''/SUCCESS/s//`printf "\033[32mSUCCESS\033[0m"`/'' | sed ''/FAILURE/s//`printf "\033[31mFAILURE\033[0m"`/'' | sed -e "s/^.*rule results.*$/\x1b[1;34m&\x1b[0m/"
+
+  if [ -z "${f}" ]; then
+       eval "$rulecombine"| sed -e $"/SUCCESS/i\\\n"|  sed "/SUCCESS/i----------------------------------------------------------------" | sed ''/SUCCESS/s//`printf "\033[32mSUCCESS\033[0m"`/'' | sed ''/FAILURE/s//`printf "\033[31mFAILURE\033[0m"`/'' | sed -e "s/^.*rule results.*$/\x1b[1;34m&\x1b[0m/"
+  else
+       parallel-ssh -v -p 5 -i -t 0 -o ConnectTimeout=10 -h ${f} "$rulecombine"| sed -e $"/SUCCESS/i\\\n"|  sed "/SUCCESS/i----------------------------------------------------------------" | sed ''/SUCCESS/s//`printf "\033[32mSUCCESS\033[0m"`/'' | sed ''/FAILURE/s//`printf "\033[31mFAILURE\033[0m"`/'' | sed -e "s/^.*rule results.*$/\x1b[1;34m&\x1b[0m/"
+  fi
 fi
+
