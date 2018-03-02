@@ -20,7 +20,11 @@ Example of arguments
 
 * Print flows where the src and dest port are 1024 or greater
 
-`--type=all --sport=1024- --dport=1024- --pass=stdout | rwcut`
+`rwfilter --type=all --sport=1024- --dport=1024- --pass=stdout | rwcut`
+
+---
+
+* Print 
 
 ## Examples from http://tools.netsa.cert.org/silk/analysis-handbook.pdf
 
