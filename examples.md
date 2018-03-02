@@ -18,9 +18,15 @@ Example of arguments
 
 ---
 
-* Print flows where the src and dest port are 1024 or greater
+* Print flows where the src port AND dest port are 1024 or greater
 
 `rwfilter --type=all --sport=1024- --dport=1024- --pass=stdout | rwcut`
+
+---
+
+* Print flows for UDP traffic where either the src ip or dest ip is in the 74.207.236.0/24 range, and where either src port or dest port are 13414. 
+
+`rwfilter --type=all --proto=17 --any-address=74.207.236.0/24 --aport=13414 --pass=stdout | rwcut`
 
 ---
 
