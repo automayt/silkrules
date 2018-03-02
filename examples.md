@@ -10,15 +10,17 @@ Example of arguments
 | ------------- |:-------------:| -----:| -----:|
 | --type=all      | --protocol=0-255 | --pass=stdout | rwfilter --type=all --protocol=0-255 --pass=stdout |
 
+---
+
 * Print all flows for the current day until the current time
 
 `rwfilter --type=all --protocol=0-255 --pass=stdout | rwcut`
 
+---
+
 * Print flows where the src and dest port are 1024 or greater
 
-
-
-| --type=all    | --sport=1024 --dport=1024- | --pass=stdout | rwfilter --type=all --protocol=0-255 --pass=stdout |
+`--type=all --sport=1024- --dport=1024- --pass=stdout | rwcut`
 
 ## Examples from http://tools.netsa.cert.org/silk/analysis-handbook.pdf
 
