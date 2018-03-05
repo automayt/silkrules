@@ -41,6 +41,10 @@ rwstats performs statistical calculations on the flow records provided from the 
 
 `rwfilter --type=all --protocol=0-255 --pass=stdout | rwstats --top --count=10 --field=protocol --value=bytes,packets,records`
 
+* Determine the top 10 externally facing RDP IP address and how many external addresses are connecting to it, as well as how many total bytes made up that conversation. In cases where the byte count might represent real data moving across, you could then filter down on the local address and do a rwstats for the external addresses themselves that make up the majority of the data.
+
+`rwfilter --type=in --protocol=6 --dport=3389 --pass=stdout | rwstats --top --count=10 --field=dip --value=distinct:sip`
+
 ## Examples from http://tools.netsa.cert.org/silk/analysis-handbook.pdf
 
 * TCP and UDP traffic, but leveraging --python-expr to match records with the same sport and dport. Example 5.2.3
