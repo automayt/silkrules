@@ -115,8 +115,27 @@ dPort|               Bytes|    %Bytes|   cumul_%|
 ```
 jason@ubuntu:~$ rwfilter bigflows.rwf --protocol=0-255 --plugin=app-mismatch.so --pass=stdout | rwstats --top --count=10 --fields=sip,scc,dip,dcc --value=bytes
 ```
-
 ---
+
+## rwuniq Examples
+* Finding all uniquely different protocols, with how many records they exist in. Change the "records" to any other value with the --value option in rwuniq.
+```
+jason@ubuntu:~$ rwfilter bigflows.rwf --protocol=0-255 --pass=stdout | rwuniq --fields=proto
+pro|   Records|
+  6|     32580|
+  1|       761|
+ 17|      8318|
+  2|       100|
+```
+* same thing, but just printing the protos, for massaging later with other tools.
+```
+jason@ubuntu:~$ rwfilter bigflows.rwf --protocol=0-255 --pass=stdout | rwuniq --fields=proto --no-titles --no-columns | cut -d "|" -f1
+6
+1
+17
+2
+```
+----
 
 ## Advanced Examples
 * Consider all data in bigflows.rwf, and pass it to another filter which will take that data, and FAIL and data that has a dcc of (us or --). The next filter takes that data (now with dcc=us or dcc=-- removed), and it will further remove --dport=80. These can't be done in the same rwfilter FAIL filter because rwfilter is "ANDing" all things within unless otherwise stated (single things like dcc that allow comma delimited values).
