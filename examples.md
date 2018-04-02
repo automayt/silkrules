@@ -1,3 +1,20 @@
+## Notes for the examples below
+
+For the sample "bigflows.rwf" that I use in many example, it was created from these. Note that many plugins will not work due to the conversion, but instead you might prefer to tcpreplay the pcap instead of using rwp2yaf2silk.
+* Downloading a pcap of "large flows" that is about 5 minutes long.
+```
+jason@ubuntu:~$ wget https://s3.amazonaws.com/tcpreplay-pcap-files/bigFlows.pcap
+```
+* (the quick but not great way) - Convert the pcap to an rwf file for rwfilter to read.
+```
+jason@ubuntu:~$ rwp2yaf2silk --input bigFlows.pcap --output bigflows.rwf
+```
+* (the 5 minute way, but will use your SiLK deployment with applabeling and more) - Convert the pcap to flows for rwfilter to read without an rwf file . Don't use -t with it as it will affect the "rate" that things arrive. Just give it 5 minutes to run real-time.
+```
+sudo tcpreplay -i eth0 bigFlows.pcap
+```
+---
+
 ## rwfilter/rwcut Examples
 
 These examples identify queries that are used for the most basic searches. Any rwfilter command needs an INPUT_ARG, an OUTPUT_ARG, and a PARTITIONING_ARG at minimum. Pipe the rwfilter command to rwcut to print the results in a human readable format.
